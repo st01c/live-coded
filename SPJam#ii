@@ -1,0 +1,119 @@
+## st01c SPJam#ii ## 2015-02-10
+
+
+bpm = 70
+
+live_loop :ts2 do
+  use_bpm bpm
+  4.times do
+    with_fx :lpf, cutoff: rrand_i(80,110) do
+      with_fx :reverb, room: 0.4 do
+        with_fx :distortion, distort: 0.9 do
+          sleep 0.25
+          #sample :drum_snare_soft, attack: 0.05, release: 0.4, amp: [0,0.7].choose
+        end
+      end
+    end
+  end
+end
+
+
+
+live_loop :kick do
+  use_bpm bpm
+  sync :ts2
+  sample :bd_klub, amp: 0.6
+  sleep 1
+  with_fx :echo, phase: 0.1, attack: 0.2, mix: 0.1 do
+    #sample :drum_snare_hard
+    sleep 1
+  end
+end
+
+live_loop :bd do
+  use_bpm bpm
+  sync :ts2
+  with_fx :reverb, damp: rrand_i(0,1), room: rrand_i(0,0.5) do
+    if one_in(2)
+      sleep 1
+      #sample :perc_snap
+      sleep 0.75
+      sample :perc_snap
+    else
+      sleep 0.25
+      sample :perc_snap
+      sleep 0.75
+      sample :perc_snap
+    end
+  end
+end
+
+
+live_loop :tic do
+  use_bpm bpm
+  sync :ts2
+  with_fx :reverb, damp: rrand_i(0,1), room: rrand_i(0,0.5) do
+    if one_in(2)
+      sleep 0.75
+      #sample :elec_tick
+      sleep 0.5
+      #sample :elec_tick
+    else
+      sleep 0.5
+      #sample :elec_tick
+      sleep 0.25
+      #sample :elec_tick
+    end
+  end
+end
+
+
+live_loop :guit1 do
+  use_bpm bpm
+  #sync :ts2
+  1.times do
+    with_fx :ring do
+      with_fx :distortion do
+        #sample :guit_e_fifths, start: 0.4, finish: 0.65, attack: 0.05, release: 0.3, rate: 0.5, amp: 3
+        sleep 4
+      end
+    end
+  end
+end
+
+
+live_loop :guit2 do
+  use_bpm bpm
+  #sync :ts2
+  1.times do
+    with_fx :distortion do
+      #sample :guit_em9, start: 0.4, finish: 0.65, attack: 0.05, release: 0.3, rate: 0.4, amp: 3
+      sleep 4
+    end
+  end
+end
+
+live_loop :guit3 do
+  use_bpm bpm
+  #sync :ts2
+  1.times do
+    with_fx :distortion do
+      #sample :guit_harmonics, start: 0.4, finish: 0.65, attack: 0.05, release: 0.3, rate: 0.2, amp: 3
+      sleep 4
+    end
+  end
+end
+
+live_loop :guit4 do
+  use_bpm bpm
+  #sync :ts2
+  1.times do
+    with_fx :flanger do
+      sample :guit_e_slide, attack: 0.6, rate: 0.15
+      sleep 4
+    end
+  end
+end
+
+
+#print sample_duration :guit_e_fifths, start: 0.4, finish: 0.65, rate: 0.4
