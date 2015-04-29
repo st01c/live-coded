@@ -1,0 +1,91 @@
+# st01c Signal Culture residency Day 3 SONIC PI morning jam
+
+load_sample "/Users/martinzeilinger/Music/LC/blixab.wav"
+sd = sample_duration "/Users/martinzeilinger/Music/LC/blixab.wav"
+blixab = "/Users/martinzeilinger/Music/LC/blixab.wav"
+
+v = 0
+
+live_loop :sinesus do
+  sync :kick
+  use_synth :beep
+  with_fx :bitcrusher, bits: 6 do
+    play 55+v, amp: 0.3, sustain: 6
+    sleep 4
+  end
+end
+
+live_loop :kick do
+  2.times do
+    with_fx :echo, phase: 0.25, mix: 1 do
+      with_fx :ixi_techno do
+        sample :bd_klub, amp: 5
+        sleep 1
+      end
+    end
+  end
+end
+
+live_loop :sinesus2 do
+  sync :kick
+  use_synth :beep
+  with_fx :bitcrusher, bits: 6 do
+    sleep 1
+    play 60+v, amp: 0.3, sustain: 4
+    sleep 2
+  end
+end
+
+live_loop :ts do
+  sync :kick
+  2.times do
+    sleep 0.75
+    sample :elec_flip, amp: 3
+  end
+end
+
+live_loop :pedal do
+  sync :kick
+  with_fx :echo, mix: 0, phase: 0.25 do
+    if rand < 0.5
+      5.times do
+        sample :drum_cymbal_pedal, sustain: 0, release: 0.05
+        sleep 0.33
+      end
+    else
+      4.times do
+        sample :drum_cymbal_pedal, sustain: 0, release: 0.05
+        sleep 0.25
+      end
+    end
+  end
+end
+
+live_loop :arp do
+  x = choose([0,0,0,3,5])
+  sync :kick
+  use_synth :dull_bell
+  with_fx :ixi_techno do
+    #with_fx :slicer do
+      play_pattern_timed [54+x,64+x,60+x,64+x,54+x,62+x], choose([0.25,0.25,0.125]), amp: 0.75
+      sleep choose([0.5,0.25])
+    #end
+  end
+end
+
+define :bargeld do
+  step = 0.02
+  startt = 0.5
+  fint = 0.5
+  loop do
+    sample blixab, start: startt, finish: fint, amp: 3
+    startt = startt-step if startt > 0.03
+    fint = fint+step if fint < 0.97
+    sleep sd*(fint-startt)
+  end
+end
+
+live_loop :bb do
+  #bargeld
+  sleep 1
+end
