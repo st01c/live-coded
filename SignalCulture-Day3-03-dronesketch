@@ -1,0 +1,54 @@
+live_loop :a do
+  sleep 4
+end
+
+v = -7
+
+live_loop :dr1 do
+  with_fx :distortion, distort: 0.5 do
+    sync :a
+    with_synth :dsaw do
+      play 40+v, sustain: 8, amp: 0.35
+    end
+  end
+end
+
+live_loop :dr2 do
+  sync :a
+  with_synth :dsaw do
+    play 45+v, sustain: 8, amp: 0.35
+  end
+end
+
+live_loop :kick do
+  sync :a
+  8.times do
+    sample :bd_fat, amp: 4
+    sleep 0.5
+  end
+end
+
+live_loop :hat do
+  sync :a
+  8.times do
+    sleep 1
+    sample :drum_cymbal_closed, sustain: 0, release: 0.1, amp: 0.5, rate: 0.3
+  end
+end
+
+live_loop :pedal do
+  sync :a
+  with_fx :echo, mix: 0, phase: 0.4 do
+    if rand < 0.5
+      5.times do
+        sample :drum_cymbal_pedal, sustain: 0, release: 0.05
+        sleep 0.33
+      end
+    else
+      6.times do
+        sample :drum_cymbal_pedal, sustain: 0, release: 0.05
+        sleep 0.25
+      end
+    end
+  end
+end
