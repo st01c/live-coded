@@ -1,0 +1,95 @@
+# @st01c Signal Culture res
+
+live_loop :a do
+  sample :drum_cymbal_open, attack: 0.01, sustain: 0, release: 0.01, amp: 1, rate: 0.1
+  sleep 1
+  2.times do
+    with_fx :bitcrusher, bits: rrand_i(4,7) do
+      sample :drum_cymbal_open, attack: 0.01, sustain: 0, release: 0.1, rate: 0.5
+      sleep 0.5
+    end
+  end
+  if rand < 0.4
+    sample :loop_amen, rate: 2, start: 0.5, attack: 0.01, sustain: 0, release: 0.35
+  end
+  sleep 1
+  if rand < 0.75
+    sample :loop_amen, rate: 0.4, start: 0.5, finish: 0.7
+  else
+    sample :loop_amen, rate: 0.4, start: 0.5, finish: 0.7, amp: 0
+  end
+end
+
+live_loop :love do
+  sync :a
+  12.times do
+    with_fx :echo, mix: 0, phase: 0.25 do
+      sample :bd_klub, amp: 5, rate: 1
+      sleep 0.5
+    end
+  end
+end
+
+live_loop :pedal do
+  sync :a
+  with_fx :bitcrusher, bits: rrand_i(4,7) do
+    with_fx :echo, mix: 0, phase: 0.4 do
+      if rand < 0.8
+        5.times do
+          sample :drum_cymbal_pedal, sustain: 0, release: 0.05
+          sleep 0.33
+        end
+      else
+        6.times do
+          sample :drum_cymbal_pedal, sustain: 0, release: 0.05
+          sleep 0.25
+        end
+      end
+    end
+  end
+end
+
+live_loop :ts do
+  sync :a
+  if rand < 0.3
+    with_fx :reverb do
+      4.times do
+        sample :elec_cymbal, amp: 0.5, attack: 0.15, sustain: 0, release: 0.3, rate: -1
+        sleep 0.33
+      end
+    end
+  end
+end
+
+
+
+v = 7
+#-7
+
+live_loop :dr1 do
+  with_fx :distortion, distort: 0.7, mix: 0.5 do
+    sync :a
+    with_synth :dsaw do
+      play 42+v, sustain: 8, amp: 0.4
+    end
+  end
+end
+
+live_loop :dr2 do
+  with_fx :distortion, distort: 0.8, mix: 0.2 do
+    sync :a
+    with_synth :dsaw do
+      play 45+v, sustain: 8, amp: 0.5
+    end
+  end
+end
+
+live_loop :dr3 do
+  sync :a
+  with_fx :distortion, distort: 0.8 do
+    2.times do
+      sample :ambi_glass_hum, rate: choose([0.5,1])
+      sleep sample_duration :ambi_glass_hum
+    end
+  end
+end
