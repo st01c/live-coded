@@ -1,0 +1,98 @@
+# @st01c Signal Culture residency Day 4 Sonic Pi morning doodles April 30 2015
+
+use_bpm 73
+
+live_loop :sbeat do
+  sleep 1
+end
+
+live_loop :lbeat do
+  sleep 4
+end
+
+live_loop :kick do
+  sync :sbeat
+  [(spread 2,5),(spread 3,8)].choose.each do |a|
+    sample a ? :bd_tek : :elec_plip, amp: 3
+    sleep 0.25
+  end
+end
+
+live_loop :pedal do
+  sync :lbeat
+  if rand < 0.5
+    5.times do
+      sample :drum_cymbal_pedal, rate: rrand(0.97,1.03), release: rrand(0.0015,0.01)
+      sleep 0.33
+    end
+  end
+end
+
+live_loop :ts do
+  sync :sbeat
+  (spread 3,8).each do |b|
+    sample :elec_flip, amp: 4, rate: 1 if b
+    sample :elec_tick, amp: 3, sustain: 0, release: 0.2, rate: [1,1,1,0.95].choose unless b
+    sleep 0.25
+  end
+end
+
+live_loop :echtkick do
+  sync :sbeat
+  (spread 2,4).each do |c|
+    use_synth :dsaw
+    with_fx :bitcrusher, bits: 3 do
+      with_fx :distortion do
+        play 30, release: 0.05, amp: 4 if c
+        sleep 0.25
+      end
+    end
+  end
+end
+
+live_loop :chord do
+  sync :lbeat
+  use_synth :dull_bell
+  if rand < 0.8
+    with_transpose [0,-3].choose do
+      play 53, release: 2, amp: 3
+      play_pattern_timed [50,51,50,53,52,50],[0.25,0.5], release: 2, amp: 3
+      sleep 0.25
+      if rand < 0.5
+        play_pattern_timed [50,48,50,53],[0.25,0.5], release: 2, amp: 3
+      else
+        play_pattern_timed [50,49,48,47],[0.5,0.25], release: 2, amp: 3
+      end
+      play 53, release: 2, amp: 3
+      sleep 0.25
+    end
+  end
+end
+
+live_loop :hiss do
+  sync :lbeat
+  if rand < 0.66
+    use_synth :cnoise
+    with_fx :compressor do
+      play 25, sustain: 1.5, amp: 0.15
+    end
+  end
+end
+
+live_loop :boos do
+  sync :lbeat
+  2.times do
+    with_fx :pitch_shift, pitch: 0, time_dist: rrand(50,200) do
+      with_fx :slicer, phase: 0.125, mix: 1 do
+        sample :guit_e_fifths, rate: 0.3, amp: 2
+        sleep 0.25
+      end
+    end
+  end
+end
+
+live_loop :sss do
+  sync :sbeat
+  sleep [0.5,0.25].choose
+  sample :loop_amen, rate: rrand(6,10), pan: [-1,0,1].choose, amp: 0.75 if one_in(5)
+end
