@@ -1,0 +1,64 @@
+# st01c Signal Culture Day 3 Sonic Pi jam 02
+
+use_bpm 90
+
+live_loop :m1 do
+  sleep 1
+end
+
+live_loop :sampletest do
+  sync :m1
+  sample :ambi_glass_hum, amp: 1.5, rate: 0.7
+  sleep 4
+end
+
+live_loop :m do
+  sync :m1
+  sample :ambi_drone, rate: 0.5
+  [spread( 4,9),spread( 3,8)].choose.each do |b|
+    sample :bd_klub, amp: 4 if b
+    sample :drum_cymbal_pedal, amp: [0,1].choose, rate: rrand(0.95, 1.05), pan: rrand(-0.1, 0.1) if ! b
+    sleep 0.25
+  end
+end
+
+live_loop :bassline do
+  sync :m1
+  use_synth :fm
+  with_transpose 0 do
+    play [48, 50, 53, 45, 48, 48].choose, release: 2, amp: 2
+    play_pattern_timed [48,50,53,45,48,50], [2], amp: 2, release: 2
+    sleep 2
+  end
+end
+
+live_loop :tick do
+  sync :m1
+  spread( 3,8).each do |x|
+    with_fx :echo, phase: 0.125, mix: 0.35 do
+      sample :elec_tick, amp: 4 if x
+      sleep [0.25,0.5,0.5].choose
+    end
+  end
+end
+
+live_loop :drone do
+  use_synth :gnoise
+  with_fx :slicer, pulse_width: [0.125,0.125,0.075].choose, mix: 1 do
+    with_fx :bitcrusher, bits: 3 do
+      play chord(:d2), amp: 1, sustain: 3
+      sleep 4
+    end
+  end
+end
+
+
+live_loop :mel do
+  sync :m1
+  with_fx :echo, phase: [0.25, 0.75].choose, mix: 0 do
+    play 72
+    play 64
+    play 67, amp: 2, pan: -0.5 if one_in 12
+    play 69, amp: 1.5, pan: 0.5 if one_in 14
+  end
+end
