@@ -1,3 +1,1 @@
-# live-coded
-
-code saves from various jams – currently mostly in Sonic Pi.
+# coded live and otherwise in Sonic Pi
